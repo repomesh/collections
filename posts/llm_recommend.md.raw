@@ -5850,6 +5850,18 @@ serving：
 
 ![](../assets/hybrid-gpu-cpu-recall.png)
 
+gpu侧的模型是双塔+deepfm，deepfm的输入有qu+i，以及u+i的交互，qu+i会单独算一个nce
+
+![](../assets/hybrid-gpu-cpu-recall-model.png)
+
+gpu侧serving：用的是[SilverTorch](https://arxiv.org/pdf/2511.14881)的框架
+
+![](../assets/hybrid-gpu-cpu-recall-serving.png)
+
+cpu侧的模型是一个双塔的finetune过的[XLM-V](https://arxiv.org/pdf/2301.10472)，qu和i的内积去算nce，具体实现的时候不是直接全库ANN，会有聚类的操作。例如下图想要找top3，会搞个乘子（图中是2），从4个cluster里把top 6取出来，再用一些别的规则过滤，剩下top3
+
+![](../assets/hybrid-gpu-cpu-recall-eager-retrieval.png)
+
 
 ## 美团的NGA
 
